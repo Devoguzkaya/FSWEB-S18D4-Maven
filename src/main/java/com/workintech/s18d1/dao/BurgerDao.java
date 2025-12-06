@@ -2,15 +2,17 @@ package com.workintech.s18d1.dao;
 
 import com.workintech.s18d1.entity.BreadType;
 import com.workintech.s18d1.entity.Burger;
+
 import java.util.List;
 
 public interface BurgerDao {
+
     Burger save(Burger burger);
-    Burger findById(long id);
+    Burger findById(Long id); // Integer -> Long
     List<Burger> findAll();
-    List<Burger> findByPrice(Double price);
+    List<Burger> findByPrice(Integer price); // Double -> Integer
     List<Burger> findByBreadType(BreadType breadType);
     List<Burger> findByContent(String content);
     Burger update(Burger burger);
-    Burger remove(long id);
+    Burger remove(Long id); // Integer -> Long
 }

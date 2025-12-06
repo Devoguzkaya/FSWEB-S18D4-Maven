@@ -2,10 +2,12 @@ package com.workintech.s18d1.dao;
 
 import com.workintech.s18d1.entity.BreadType;
 import com.workintech.s18d1.entity.Burger;
+import com.workintech.s18d1.exceptions.BurgerException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,8 +30,12 @@ public class BurgerDaoImpl implements BurgerDao {
     }
 
     @Override
-    public Burger findById(long id) {
-        return entityManager.find(Burger.class, id);
+    public Burger findById(Long id) {
+        Burger burger = entityManager.find(Burger.class, id);
+        if (burger == null) {
+            throw new BurgerException("Burger not found with id: " + id, HttpStatus.NOT_FOUND);
+        }
+        return burger;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class BurgerDaoImpl implements BurgerDao {
     }
 
     @Override
-    public List<Burger> findByPrice(Double price) {
+    public List<Burger> findByPrice(Integer price) {
         TypedQuery<Burger> query = entityManager.createQuery(
                 "SELECT b FROM Burger b WHERE b.price > :price ORDER BY b.price DESC", Burger.class);
         query.setParameter("price", price);
@@ -56,10 +62,10 @@ public class BurgerDaoImpl implements BurgerDao {
 
     @Override
     public List<Burger> findByContent(String content) {
-        // ingredients listesi içinde arama yapıyoruz
         TypedQuery<Burger> query = entityManager.createQuery(
-                "SELECT b FROM Burger b JOIN b.ingredients i WHERE i = :content", Burger.class);
-        query.setParameter("content", content);
+                "SELECT b FROM Burger b WHERE b.contents LIKE :content", Burger.class);
+        // % işareti ekleyerek "içinde geçen" araması yapıyoruz
+        query.setParameter("content", "%" + content + "%");
         return query.getResultList();
     }
 
@@ -71,11 +77,9 @@ public class BurgerDaoImpl implements BurgerDao {
 
     @Transactional
     @Override
-    public Burger remove(long id) {
-        Burger burger = findById(id);
-        if (burger != null) {
-            entityManager.remove(burger);
-        }
+    public Burger remove(Long id) {
+        Burger burger = findById(id); // Zaten null kontrolü yapıyor (Exception fırlatıyor)
+        entityManager.remove(burger);
         return burger;
     }
 }

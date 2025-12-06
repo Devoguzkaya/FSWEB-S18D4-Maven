@@ -11,4 +11,8 @@ public class BurgerException extends RuntimeException {
         super(message);
         this.status = status;
     }
+
+    public HttpStatus getHttpStatus() {
+        return status;
+    }
 }

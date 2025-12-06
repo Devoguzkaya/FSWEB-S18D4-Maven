@@ -3,7 +3,6 @@ package com.workintech.s18d1.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,8 +26,6 @@ public class Burger {
     @Column(name = "bread_type")
     private BreadType breadType;
 
-    @ElementCollection
-    @CollectionTable(name = "burger_ingredients", joinColumns = @JoinColumn(name = "burger_id"))
-    @Column(name = "ingredient")
-    private List<String> ingredients;
+    @Column(name = "contents")
+    private String contents;
 }

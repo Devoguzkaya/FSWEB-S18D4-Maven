@@ -21,7 +21,7 @@ public class ResultAnalyzer implements TestWatcher, AfterAllCallback{
     private List<TestResultStatus> testResultsStatus = new ArrayList<>();
     private static final String taskId = "162";
 
-    private enum TestResultStatus {
+    public enum TestResultStatus { // private -> public olarak deðiþtirildi
         SUCCESSFUL, ABORTED, FAILED, DISABLED;
     }
 
