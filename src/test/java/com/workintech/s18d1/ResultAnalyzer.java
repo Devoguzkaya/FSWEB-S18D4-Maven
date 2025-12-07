@@ -21,7 +21,7 @@ public class ResultAnalyzer implements TestWatcher, AfterAllCallback{
     private List<TestResultStatus> testResultsStatus = new ArrayList<>();
     private static final String taskId = "162";
 
-    public enum TestResultStatus { // private -> public olarak deðiþtirildi
+    public enum TestResultStatus {
         SUCCESSFUL, ABORTED, FAILED, DISABLED;
     }
 
@@ -50,7 +50,6 @@ public class ResultAnalyzer implements TestWatcher, AfterAllCallback{
         Map<TestResultStatus, Long> summary = testResultsStatus.stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        // (summary.get(TestResultStatus.SUCCESSFUL) + summary.get(TestResultStatus.FAILED)) / summary.get(TestResultStatus.SUCCESSFUL);
         long success = summary.get(TestResultStatus.SUCCESSFUL) != null ? summary.get(TestResultStatus.SUCCESSFUL) : 0;
         long failure = summary.get(TestResultStatus.FAILED) != null ? summary.get(TestResultStatus.FAILED) : 0;
 
